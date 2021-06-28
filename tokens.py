@@ -1,11 +1,8 @@
-import json
 import time
-
 import requests
 
 response_create_status = requests.get("https://playground.learnqa.ru/ajax/api/longtime_job")
-
-response_create_status_message = json.loads(response_create_status.text)
+response_create_status_message = response_create_status.json()
 print(f"Текст ответа на первый запрос: {response_create_status_message}")
 
 token = None
@@ -20,8 +17,9 @@ for key in keys_wo_get_param:
     if key not in response_create_status_message:
         print(f"Ключа {key} в тексте ответе нет")
 
+
 response_check_status = requests.get("https://playground.learnqa.ru/ajax/api/longtime_job", params={"token": token})
-response_check_status_message = json.loads(response_check_status.text)
+response_check_status_message = response_check_status.json()
 print(f"Текст ответа на второй запрос: {response_check_status_message}")
 
 tmp_status = None
@@ -43,7 +41,7 @@ for key in keys_with_get_param:
 if tmp_status == "Job is NOT ready" and tmp_error is None:
     time.sleep(seconds)
     response_check_result = requests.get("https://playground.learnqa.ru/ajax/api/longtime_job", params={"token": token})
-    response_check_result_message = json.loads(response_check_result.text)
+    response_check_result_message = response_check_result.json()
     print(f"Текст ответа на третий запрос: {response_check_result_message}")
 
     status = None
